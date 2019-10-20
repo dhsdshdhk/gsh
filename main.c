@@ -55,6 +55,7 @@ char **split_command(char *command){
     char *arg;
     while ((arg = strsep(&command, " ")) != NULL)
         args[i++] = arg;
+    args[i] = NULL;
     return args;
 }
 
@@ -80,13 +81,8 @@ int execute(char **commands){
             }
     }
     // espera os filhos morrerem.
-    wait(NULL);
-    while(1){
-        wait(NULL);
-        if(errno == ECHILD){
-            break;
-        }
-    }
+    for(int i = 0; i < c; i++)
+        waitpid(pid[i], &status[i], 0);
 
     return 1;
 }
