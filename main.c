@@ -85,22 +85,22 @@ int execute(char **commands){
     pid_t pid[c], wpid;
     int status[c];
     char** args;
-    //printf("Commands to execute:\n");
+    
     for(int i = 0; i < c; i++){
         args = split_command(commands[i]);
-        //printf("%s with args ", args[0]);
-        //for(int j = 0; j < len_commands(args); j++)
-        //    printf("%s ", args[j]);
-        //printf("\n");
         pid[i] = fork();
         if(!pid[i]){
             args = split_command(commands[i]);
             execvp(args[0], args);
             }
     }
-    //espera os filhos morrerem.
-    for(int i = 0; i < c; i++)
-        waitpid(pid[i], &status[i], 0);
+
+    for(int i = 0; i < c; i++){
+        do{
+            wpid = waitpid(pid[i], &status[i], WUNTRACED);
+        }while (!WIFEXITED(status[i]) && !WIFSIGNALED(status[i]));
+        
+    }
 
     return 1;
 }
