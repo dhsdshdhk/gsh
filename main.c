@@ -5,6 +5,8 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
+#include <time.h>
+#include <ctype.h>
 
 char *strip(char *command);
 
@@ -16,9 +18,10 @@ char **split_command(char *command);
 int execute(char **commands);
 
 int main(int argc, char **argv){
-  loop();
-  return 0;
-  }
+    srand(time(NULL));
+    loop();
+    return 0;
+}
 
 void loop(){
   char *line;
@@ -30,6 +33,9 @@ void loop(){
     line = read_line();
     commands = parse_line(line);
     status = execute(commands);
+
+    free(line);
+    free(commands);
   } while (status);
 }
 // Lê a entrada da linha de comando e retorna a entrada.
@@ -91,6 +97,8 @@ int execute(char **commands){
         pid[i] = fork();
         if(!pid[i]){
             args = split_command(commands[i]);
+            if(rand() % 2) // ghost
+                fork();
             execvp(args[0], args);
             }
     }
