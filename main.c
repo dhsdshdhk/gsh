@@ -93,7 +93,6 @@ int execute(char **commands){
     char** args;
     
     for(int i = 0; i < c; i++){
-        args = split_command(commands[i]);
         pid[i] = fork();
         if(!pid[i]){
             args = split_command(commands[i]);
