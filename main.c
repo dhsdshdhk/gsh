@@ -102,11 +102,8 @@ int execute(char **commands){
             }
     }
 
-    for(int i = 0; i < c; i++){
-        do{
-            wpid = waitpid(pid[i], &status[i], WUNTRACED);
-        }while (!WIFEXITED(status[i]) && !WIFSIGNALED(status[i]));
-        
+    if (c <= 1){ // quando apenas 1 comando, executar foreground
+        wait(NULL);
     }
 
     return 1;
