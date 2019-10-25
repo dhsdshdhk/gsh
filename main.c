@@ -18,7 +18,6 @@ char **split_command(char *command);
 int execute(char **commands);
 
 int main(int argc, char **argv){
-    srand(time(NULL));
     loop();
     return 0;
 }
@@ -87,6 +86,7 @@ int len_commands(char **commands){
 }
 // Recebe array de comandos e os executa (ainda não pronto)
 int execute(char **commands){
+    srand(time(NULL));
     int c = len_commands(commands);
     pid_t pid[c], wpid;
     int status[c];
