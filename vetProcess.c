@@ -35,7 +35,7 @@ pControl VetProcessremoveItem(pControl pc, process *p){
         if(pc.process[i] == p){
             pc.process[i] = NULL;
             pc.length -= 1;
-            free(pc.process[i]);
+            free(p);
             break;
         }
     }
