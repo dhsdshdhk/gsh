@@ -29,13 +29,7 @@ struct sigaction act;
 int main(int argc, char **argv)
 {
     processControl = VetProcessinit();
-    //act.sa_handler = sigintHandle;
-    //act.sa_flags = 0;
-    //sigemptyset(&act.sa_mask);
-    //sigfillset(&act.sa_mask);
-    //if(sigaction(SIGINT, &act, NULL) == -1){
-    //    printf("Erro ao instalar o sinal");
-    //}
+
     if (signal(SIGINT, sigintHandle) == SIG_ERR)
     {
         printf("Erro ao instalar o sinal");
@@ -93,7 +87,6 @@ char **parse_line(char *line)
     char **commands = malloc(6 * sizeof(char *));
     char *command;
 
-    //printf("Parse line retorna:\n");
     while ((command = strsep(&line, "#")) != NULL)
     {
         commands[i++] = strip(command);
@@ -113,7 +106,7 @@ char **split_command(char *command)
     int i = 0;
     char **args = malloc(4 * sizeof(char *));
     char *arg;
-    //printf("Split command retorna:\n");
+
     while ((arg = strsep(&command, " ")) != NULL)
     {
         args[i++] = arg;
@@ -151,7 +144,7 @@ int execute(char **commands)
         args = split_command(commands[i]);
         if (strcmp(args[0], "mywait") == 0)
         {
-            printf("Essa bash nao deixa zombies\n");
+            printf("Essa bash não deixa zombies.\n");
             continue;
         }
         if (strcmp(args[0], "clean&die") == 0)
@@ -249,7 +242,7 @@ void sigintHandle(int sig)
     char c;
     if (processControl.length > 0)
     {
-        printf("Existe processos em execucao, deseja finalizar a shell (Y/n):");
+        printf("Existem processos em execução, deseja finalizar a shell? (Y/n)");
         c = getchar();
         if (c == 'Y' || c == 'y')
         {
@@ -296,15 +289,15 @@ void sigchldHandle(int sig)
 void sigtstphandle(int sig)
 {
     process *p = NULL;
-    //printf("shell %i %i\n", getpid(), getpgid(getpid()));
+
     while (NULL != (p = VetProcessNext(processControl, p)))
     {
-        //printf("proora\n");
+
         if(p->background){
             kill(-(p->pid), SIGTSTP);
         }
         kill(p->pid, SIGTSTP);
-        //printf("shell %i %i\n", p->pid,  p->background);
+
     }
     fflush(stdout);
 }
